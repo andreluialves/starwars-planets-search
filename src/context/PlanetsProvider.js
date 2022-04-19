@@ -4,17 +4,42 @@ import PlanetsContext from './PlanetsContext';
 import fetchPlanets from '../services/FetchPlanets';
 
 function PlanetsProvider({ children }) {
-  const [data, setData] = useState({}); // incluir o setData posteriormente
-  const [loading, setLOading] = useState();
+  const [data, setData] = useState({});
+  const [loading, setLoading] = useState();
+  const [filterByName, setfilterByName] = useState({});
 
   const getPlanets = async () => {
-    setLOading(true);
+    setLoading(true);
     const planetsResponse = await fetchPlanets();
     setData(planetsResponse);
-    setLOading(false);
+    setLoading(false);
   };
 
-  const contextValues = { data, loading, getPlanets };
+  const handleFilterByName = (event) => {
+    const { value } = event.target;
+    setfilterByName({ value });
+  };
+
+  const getNameFiltered = () => {
+    const { results } = data;
+    const searchName = filterByName.value?.toLowerCase();
+    const nameFiltered = results?.filter(
+      (item) => item.name.toLowerCase().includes(searchName),
+    );
+    // console.log(nameFiltered);
+    // if (nameFiltered) { return nameFiltered; }
+    const planet = nameFiltered?.length > 0 ? nameFiltered : results;
+    return planet;
+  };
+
+  const contextValues = {
+    data,
+    loading,
+    getPlanets,
+    filterByName,
+    handleFilterByName,
+    getNameFiltered,
+  };
 
   // console.log(fetchPlanets());
   return (

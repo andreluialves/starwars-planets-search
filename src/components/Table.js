@@ -3,10 +3,24 @@ import PlanetsContext from '../context/PlanetsContext';
 import Loading from './Loading';
 
 function Table() {
-  const { data, getPlanets, loading } = useContext(PlanetsContext);
+  const {
+    data,
+    getPlanets,
+    loading,
+    filterByName,
+    getNameFiltered,
+  } = useContext(PlanetsContext);
+
   useEffect(() => { getPlanets(); }, []);
-  const { results } = data;
-  // console.log(data);
+  useEffect(() => { getNameFiltered(); }, [data, filterByName]);
+
+  // const { results } = data;
+  const planetList = getNameFiltered();
+
+  // console.log(planetList);
+  // console.log(results);
+  // console.log(filterByName.value);
+  // console.log(resultNameFiltered);
   return (
     loading ? <Loading /> : (
       <table>
@@ -29,7 +43,7 @@ function Table() {
         </thead>
         <tbody>
           {
-            results?.map((item, index) => (
+            planetList?.map((item, index) => (
               <tr key={ index }>
                 <td>{ item.name }</td>
                 <td>{ item.rotation_period }</td>
