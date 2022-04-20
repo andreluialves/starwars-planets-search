@@ -9,18 +9,20 @@ function Table() {
     loading,
     filterByName,
     getNameFiltered,
+    numFilterArray,
+    // filterByNumericValues,
+    // getNumericFiltered,
   } = useContext(PlanetsContext);
 
   useEffect(() => { getPlanets(); }, []);
   useEffect(() => { getNameFiltered(); }, [data, filterByName]);
+  // useEffect(() => { getNumericFiltered(); }, [filterByNumericValues]);
 
   // const { results } = data;
-  const planetList = getNameFiltered();
+  const planetList = numFilterArray || getNameFiltered();
+  // const planetListByName = getNameFiltered();
+  console.log(numFilterArray);
 
-  // console.log(planetList);
-  // console.log(results);
-  // console.log(filterByName.value);
-  // console.log(resultNameFiltered);
   return (
     loading ? <Loading /> : (
       <table>

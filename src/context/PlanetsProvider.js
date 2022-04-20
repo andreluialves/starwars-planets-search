@@ -7,6 +7,10 @@ function PlanetsProvider({ children }) {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState();
   const [filterByName, setfilterByName] = useState({});
+  const [filterByNumericValues, setFilterByNumericValues] = useState({
+    column: 'population', comparison: 'maior que', value: 0,
+  });
+  const [numFilterArray, setNumFilterArray] = useState();
 
   const getPlanets = async () => {
     setLoading(true);
@@ -21,15 +25,34 @@ function PlanetsProvider({ children }) {
   };
 
   const getNameFiltered = () => {
-    const { results } = data;
     const searchName = filterByName.value?.toLowerCase();
-    const nameFiltered = results?.filter(
+    const { results } = data;
+    const dataPlanet = numFilterArray || results;
+    const nameFiltered = dataPlanet?.filter(
       (item) => item.name.toLowerCase().includes(searchName),
     );
-    // console.log(nameFiltered);
-    // if (nameFiltered) { return nameFiltered; }
     const planet = nameFiltered?.length > 0 ? nameFiltered : results;
     return planet;
+  };
+
+  const handleFilterByNumeric = (event) => {
+    const { name, value } = event.target;
+    setFilterByNumericValues({ ...filterByNumericValues, [name]: value });
+    console.log(filterByNumericValues);
+  };
+
+  const getNumericFiltered = () => {
+    const { results } = data;
+    const { column, comparison, value } = filterByNumericValues;
+    const byEquality = results?.filter((item) => item[column] === value);
+    const bySuperiority = results?.filter((item) => item[column] > Number(value));
+    const byInferiority = results?.filter((item) => item[column] < Number(value));
+
+    if (comparison === 'menor que') { setNumFilterArray([...byInferiority]); }
+    if (comparison === 'maior que') { setNumFilterArray([...bySuperiority]); }
+    if (comparison === 'igual a') { setNumFilterArray([...byEquality]); }
+
+    // setNumFilterArray([...byEquality]);
   };
 
   const contextValues = {
@@ -39,6 +62,10 @@ function PlanetsProvider({ children }) {
     filterByName,
     handleFilterByName,
     getNameFiltered,
+    filterByNumericValues,
+    handleFilterByNumeric,
+    getNumericFiltered,
+    numFilterArray,
   };
 
   // console.log(fetchPlanets());
