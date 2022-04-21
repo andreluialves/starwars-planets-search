@@ -17,11 +17,24 @@ function PlanetsProvider({ children }) {
     const planetsResponse = await fetchPlanets();
     setData(planetsResponse);
     setLoading(false);
+    // setNumFilterArray(planetsResponse.results);
+  };
+
+  const initialRender = () => {
+    const { results } = data;
+    if (numFilterArray) {
+      setNumFilterArray(numFilterArray);
+    } else {
+      setNumFilterArray(results);
+    }
+    setNumFilterArray(results);
+    console.log(numFilterArray);
   };
 
   const handleFilterByName = (event) => {
     const { value } = event.target;
     setfilterByName({ value });
+    initialRender();
   };
 
   const getNameFiltered = () => {
@@ -31,6 +44,8 @@ function PlanetsProvider({ children }) {
     const nameFiltered = dataPlanet?.filter(
       (item) => item.name.toLowerCase().includes(searchName),
     );
+    if (nameFiltered) { setNumFilterArray([...nameFiltered]); }
+
     const planet = nameFiltered?.length > 0 ? nameFiltered : results;
     return planet;
   };
@@ -38,21 +53,21 @@ function PlanetsProvider({ children }) {
   const handleFilterByNumeric = (event) => {
     const { name, value } = event.target;
     setFilterByNumericValues({ ...filterByNumericValues, [name]: value });
+    // initialRender();
     console.log(filterByNumericValues);
   };
 
   const getNumericFiltered = () => {
     const { results } = data;
+    const dataPlanet = numFilterArray || results;
     const { column, comparison, value } = filterByNumericValues;
-    const byEquality = results?.filter((item) => item[column] === value);
-    const bySuperiority = results?.filter((item) => item[column] > Number(value));
-    const byInferiority = results?.filter((item) => item[column] < Number(value));
+    const byEquality = dataPlanet?.filter((item) => item[column] === value);
+    const bySuperiority = dataPlanet?.filter((item) => item[column] > Number(value));
+    const byInferiority = dataPlanet?.filter((item) => item[column] < Number(value));
 
     if (comparison === 'menor que') { setNumFilterArray([...byInferiority]); }
     if (comparison === 'maior que') { setNumFilterArray([...bySuperiority]); }
     if (comparison === 'igual a') { setNumFilterArray([...byEquality]); }
-
-    // setNumFilterArray([...byEquality]);
   };
 
   const contextValues = {
@@ -66,9 +81,9 @@ function PlanetsProvider({ children }) {
     handleFilterByNumeric,
     getNumericFiltered,
     numFilterArray,
+    initialRender,
   };
 
-  // console.log(fetchPlanets());
   return (
     <PlanetsContext.Provider value={ contextValues }>
       { children }
