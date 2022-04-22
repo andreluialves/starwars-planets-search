@@ -8,6 +8,7 @@ function Filters() {
     handleFilterByNumeric,
     getNumericFiltered,
     filterByNumericValues,
+    updateOptionsFilter,
   } = useContext(PlanetsContext);
 
   const { column, comparison, value } = filterByNumericValues;
@@ -28,11 +29,9 @@ function Filters() {
           onChange={ handleFilterByNumeric }
           value={ column }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          {updateOptionsFilter.map((item, index) => (
+            <option key={ index } value={ item }>{ item }</option>
+          ))}
         </select>
         <select
           name="comparison"

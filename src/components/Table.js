@@ -16,6 +16,12 @@ function Table() {
   useEffect(() => { getPlanets(); }, []);
   useEffect(() => { getNameFiltered(); }, [filterByName]);
 
+  const tableTitle = [
+    'Name', 'Rotation Period', 'Orbital Period', 'Diameter',
+    'Climate', 'Gravity', 'Terrain', 'Surface Water', 'Population',
+    'Films', 'Created', 'Edited', 'URL',
+  ];
+
   const { results } = data;
   const planetList = nameFilterArray || numFilterArray || results;
 
@@ -24,7 +30,10 @@ function Table() {
       <table>
         <thead>
           <tr>
-            <th>Name</th>
+            {tableTitle.map((item, index) => (
+              <th key={ index }>{item}</th>
+            ))}
+            {/* <th>Name</th>
             <th>Rotation Period</th>
             <th>Orbital Period</th>
             <th>Diameter</th>
@@ -36,7 +45,7 @@ function Table() {
             <th>Films</th>
             <th>Created</th>
             <th>Edited</th>
-            <th>URL</th>
+            <th>URL</th> */}
           </tr>
         </thead>
         <tbody>

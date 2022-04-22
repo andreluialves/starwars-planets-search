@@ -6,6 +6,9 @@ import fetchPlanets from '../services/FetchPlanets';
 function PlanetsProvider({ children }) {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState();
+  const [updateOptionsFilter, setUpdateOptionsFilter] = useState([
+    'population', 'orbital_period', 'diameter', 'surface_water', 'rotation_period',
+  ]);
   const [filterByName, setfilterByName] = useState({});
   const [filterByNumericValues, setFilterByNumericValues] = useState({
     column: 'population', comparison: 'maior que', value: 0,
@@ -17,7 +20,6 @@ function PlanetsProvider({ children }) {
     const planetsResponse = await fetchPlanets();
     setData(planetsResponse);
     setLoading(false);
-    // setNumFilterArray(planetsResponse.results);
   };
 
   const initialRender = () => {
@@ -53,8 +55,12 @@ function PlanetsProvider({ children }) {
   const handleFilterByNumeric = (event) => {
     const { name, value } = event.target;
     setFilterByNumericValues({ ...filterByNumericValues, [name]: value });
-    // initialRender();
-    console.log(filterByNumericValues);
+  };
+
+  const handleUpdateFilter = (title) => {
+    const update = updateOptionsFilter.filter((item) => item !== title);
+    console.log(update);
+    setUpdateOptionsFilter([...update]);
   };
 
   const getNumericFiltered = () => {
@@ -68,6 +74,8 @@ function PlanetsProvider({ children }) {
     if (comparison === 'menor que') { setNumFilterArray([...byInferiority]); }
     if (comparison === 'maior que') { setNumFilterArray([...bySuperiority]); }
     if (comparison === 'igual a') { setNumFilterArray([...byEquality]); }
+
+    handleUpdateFilter(column);
   };
 
   const contextValues = {
@@ -82,6 +90,7 @@ function PlanetsProvider({ children }) {
     getNumericFiltered,
     numFilterArray,
     initialRender,
+    updateOptionsFilter,
   };
 
   return (
