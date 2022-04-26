@@ -48,7 +48,7 @@ function Filters() {
         <input
           type="number"
           name="value"
-          defaultValue='0'
+          defaultValue="0"
           data-testid="value-filter"
           onChange={ handleFilterByNumeric }
         />
@@ -59,18 +59,25 @@ function Filters() {
         >
           FILTRAR
         </button>
-        <button type="button" onClick={ filterReset } data-testid='button-remove-filters'>REMOVER FILTROS</button>
+        <button
+          type="button"
+          onClick={ filterReset }
+          data-testid="button-remove-filters"
+        >
+          REMOVER FILTROS
+        </button>
       </div>
       <div className="activeFilters">
         {activeFilters?.map((item, index) => (
           <div key={ index } data-testid="filter">
             <button
-            type="button"
-            name={item }
-            onClick={ activeFilterReset }
-          >
-            {`${item} X`}
-          </button>
+              type="button"
+              name={ item }
+              onClick={ activeFilterReset }
+            >
+              {item}
+              X
+            </button>
           </div>))}
       </div>
     </section>
