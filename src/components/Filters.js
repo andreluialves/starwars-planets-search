@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PlanetsContext from '../context/PlanetsContext';
 
 function Filters() {
@@ -7,11 +7,15 @@ function Filters() {
     handleFilterByName,
     handleFilterByNumeric,
     getNumericFiltered,
-    filterByNumericValues,
     updateOptionsFilter,
+    activeFilters,
+    filterReset,
+    activeFilterReset,
+    numFilterArray,
+    handleGetNumericFilter,
   } = useContext(PlanetsContext);
 
-  const { column, comparison, value } = filterByNumericValues;
+  useEffect(() => { handleGetNumericFilter(); }, [numFilterArray]);
 
   return (
     <section className="filters">
@@ -27,7 +31,6 @@ function Filters() {
           name="column"
           data-testid="column-filter"
           onChange={ handleFilterByNumeric }
-          value={ column }
         >
           {updateOptionsFilter.map((item, index) => (
             <option key={ index } value={ item }>{ item }</option>
@@ -37,7 +40,6 @@ function Filters() {
           name="comparison"
           data-testid="comparison-filter"
           onChange={ handleFilterByNumeric }
-          value={ comparison }
         >
           <option>maior que</option>
           <option>menor que</option>
@@ -46,7 +48,7 @@ function Filters() {
         <input
           type="number"
           name="value"
-          value={ value }
+          defaultValue='0'
           data-testid="value-filter"
           onChange={ handleFilterByNumeric }
         />
@@ -57,6 +59,19 @@ function Filters() {
         >
           FILTRAR
         </button>
+        <button type="button" onClick={ filterReset } data-testid='button-remove-filters'>REMOVER FILTROS</button>
+      </div>
+      <div className="activeFilters">
+        {activeFilters?.map((item, index) => (
+          <div key={ index } data-testid="filter">
+            <button
+            type="button"
+            name={item }
+            onClick={ activeFilterReset }
+          >
+            {`${item} X`}
+          </button>
+          </div>))}
       </div>
     </section>
   );

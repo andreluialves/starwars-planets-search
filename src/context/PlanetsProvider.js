@@ -3,17 +3,25 @@ import PropTypes from 'prop-types';
 import PlanetsContext from './PlanetsContext';
 import fetchPlanets from '../services/FetchPlanets';
 
+const FILTER_OPTIONS = [
+  'population', 'orbital_period', 'diameter', 'surface_water', 'rotation_period',
+];
+
+const INITAL_VALUES = {
+  column: 'population', comparison: 'maior que', value: '0',
+};
+
+let FILTER_ARRAY = [];
+
 function PlanetsProvider({ children }) {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState();
-  const [updateOptionsFilter, setUpdateOptionsFilter] = useState([
-    'population', 'orbital_period', 'diameter', 'surface_water', 'rotation_period',
-  ]);
+  const [updateOptionsFilter, setUpdateOptionsFilter] = useState(FILTER_OPTIONS);
   const [filterByName, setfilterByName] = useState({});
-  const [filterByNumericValues, setFilterByNumericValues] = useState({
-    column: 'population', comparison: 'maior que', value: 0,
-  });
+  const [filterByNumericValues, setFilterByNumericValues] = useState(INITAL_VALUES);
   const [numFilterArray, setNumFilterArray] = useState();
+  const [activeFilters, setActiveFilters] = useState([]);
+  const [numFilterHistory, setNumFilterHistory] = useState([]);
 
   const getPlanets = async () => {
     setLoading(true);
@@ -30,7 +38,6 @@ function PlanetsProvider({ children }) {
       setNumFilterArray(results);
     }
     setNumFilterArray(results);
-    console.log(numFilterArray);
   };
 
   const handleFilterByName = (event) => {
@@ -47,7 +54,6 @@ function PlanetsProvider({ children }) {
       (item) => item.name.toLowerCase().includes(searchName),
     );
     if (nameFiltered) { setNumFilterArray([...nameFiltered]); }
-
     const planet = nameFiltered?.length > 0 ? nameFiltered : results;
     return planet;
   };
@@ -59,14 +65,43 @@ function PlanetsProvider({ children }) {
 
   const handleUpdateFilter = (title) => {
     const update = updateOptionsFilter.filter((item) => item !== title);
-    console.log(update);
+    const active = updateOptionsFilter.filter((item) => item === title);
     setUpdateOptionsFilter([...update]);
+    setActiveFilters((prevState) => [...prevState, ...active]);
+  };
+
+  const handleGetNumericFilter = () => {
+    setNumFilterHistory((prevState) => [...prevState, filterByNumericValues]);
+  };
+
+  const handleUpdateList = () => {
+    const { results } = data;
+    const newArray = FILTER_ARRAY;
+    const lastItem = newArray[newArray.length - 1];
+    const final = lastItem ? newArray[newArray.length - 1] : {};
+    const { column, comparison, value } = final;
+    if (newArray.length > 0) {
+      const byEquality = results?.filter((item) => item[column] === value);
+      const bySuperiority = results?.filter((item) => item[column] > Number(value));
+      const byInferiority = results?.filter((item) => item[column] < Number(value));
+
+      if (comparison === 'menor que') { setNumFilterArray([...byInferiority]); }
+      if (comparison === 'maior que') { setNumFilterArray([...bySuperiority]); }
+      if (comparison === 'igual a') { setNumFilterArray([...byEquality]); }
+    } else {
+      setNumFilterArray([...results]);
+    }
+    handleUpdateFilter(column);
   };
 
   const getNumericFiltered = () => {
     const { results } = data;
     const dataPlanet = numFilterArray || results;
-    const { column, comparison, value } = filterByNumericValues;
+    FILTER_ARRAY = [...numFilterHistory, filterByNumericValues];
+    FILTER_ARRAY = FILTER_ARRAY.slice(1);
+    const lastItem = FILTER_ARRAY[FILTER_ARRAY.length - 1];
+    const { column, comparison, value } = lastItem;
+
     const byEquality = dataPlanet?.filter((item) => item[column] === value);
     const bySuperiority = dataPlanet?.filter((item) => item[column] > Number(value));
     const byInferiority = dataPlanet?.filter((item) => item[column] < Number(value));
@@ -76,6 +111,31 @@ function PlanetsProvider({ children }) {
     if (comparison === 'igual a') { setNumFilterArray([...byEquality]); }
 
     handleUpdateFilter(column);
+  };
+
+  const activeFilterReset = (event) => {
+    const { name } = event.target;
+    const active = activeFilters.length !== 1
+      ? activeFilters.filter((item) => item !== name)
+      : [];
+
+    const option = activeFilters.length !== 1
+      ? activeFilters.filter((item) => item === name)
+      : [name];
+
+    setActiveFilters(() => [...active]);
+    FILTER_ARRAY = FILTER_ARRAY.filter((item) => item.column !== name);
+    handleUpdateList();
+    setUpdateOptionsFilter([...updateOptionsFilter, ...option]);
+    setFilterByNumericValues([]);
+  };
+
+  const filterReset = (event) => {
+    event.preventDefault();
+    setNumFilterArray();
+    setUpdateOptionsFilter([
+      'population', 'orbital_period', 'diameter', 'surface_water', 'rotation_period',
+    ]);
   };
 
   const contextValues = {
@@ -91,6 +151,10 @@ function PlanetsProvider({ children }) {
     numFilterArray,
     initialRender,
     updateOptionsFilter,
+    filterReset,
+    activeFilters,
+    activeFilterReset,
+    handleGetNumericFilter,
   };
 
   return (
