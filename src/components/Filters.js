@@ -13,7 +13,14 @@ function Filters() {
     activeFilterReset,
     numFilterArray,
     handleGetNumericFilter,
+    handleColumnsSort,
+    FILTER_OPTIONS,
+    getSortData,
   } = useContext(PlanetsContext);
+
+  // const FILTER_OPTIONS = [
+  //   'population', 'orbital_period', 'diameter', 'surface_water', 'rotation_period',
+  // ];
 
   useEffect(() => { handleGetNumericFilter(); }, [numFilterArray]);
 
@@ -67,7 +74,45 @@ function Filters() {
           REMOVER FILTROS
         </button>
       </div>
-      <div className="activeFilters">
+      <div className="columns-sort">
+        <select
+          name="column"
+          data-testid="column-sort"
+          onChange={ handleColumnsSort }
+        >
+          {FILTER_OPTIONS.map((item, index) => (
+            <option key={ index } value={ item }>{ item }</option>
+          ))}
+        </select>
+        <label htmlFor="column-sort-input-asc">
+          Ascendente
+          <input
+            type="radio"
+            data-testid="column-sort-input-asc"
+            name="sort"
+            value="ASC"
+            onChange={ handleColumnsSort }
+          />
+        </label>
+        <label htmlFor="column-sort-input-desc">
+          Descendente
+          <input
+            type="radio"
+            data-testid="column-sort-input-desc"
+            name="sort"
+            value="DESC"
+            onChange={ handleColumnsSort }
+          />
+        </label>
+        <button
+          type="button"
+          data-testid="column-sort-button"
+          onClick={ getSortData }
+        >
+          Ordenar
+        </button>
+      </div>
+      <div className="active-filters">
         {activeFilters?.map((item, index) => (
           <div key={ index } data-testid="filter">
             <button

@@ -11,6 +11,8 @@ const INITAL_VALUES = {
   column: 'population', comparison: 'maior que', value: '0',
 };
 
+const INITAL_ORDER = { column: 'population', sort: 'ASC' };
+
 let FILTER_ARRAY = [];
 
 function PlanetsProvider({ children }) {
@@ -22,6 +24,8 @@ function PlanetsProvider({ children }) {
   const [numFilterArray, setNumFilterArray] = useState();
   const [activeFilters, setActiveFilters] = useState([]);
   const [numFilterHistory, setNumFilterHistory] = useState([]);
+  const [columnsSort, setColumnsSort] = useState(INITAL_ORDER);
+  const [initialData, setInitialData] = useState();
 
   const getPlanets = async () => {
     setLoading(true);
@@ -38,6 +42,15 @@ function PlanetsProvider({ children }) {
       setNumFilterArray(results);
     }
     setNumFilterArray(results);
+  };
+
+  const initialSortRender = () => {
+    const { results } = data;
+    const newData = numFilterArray || results;
+    const sortData = newData?.sort(
+      (itemA, itemB) => itemA.name.localeCompare(itemB.name),
+    );
+    setInitialData(sortData);
   };
 
   const handleFilterByName = (event) => {
@@ -138,6 +151,33 @@ function PlanetsProvider({ children }) {
     ]);
   };
 
+  const handleColumnsSort = (event) => {
+    const { name, value } = event.target;
+    setColumnsSort({ ...columnsSort, [name]: value });
+  };
+
+  const sortAsc = (itemA, itemB) => {
+    if (itemA === 'unknown') { return 1; }
+    if (itemB === 'unknown') { return Number('-1'); }
+    return itemA - itemB;
+  };
+
+  const sortDesc = (itemA, itemB) => {
+    if (itemB === 'unknown') { return Number('-1'); }
+    return itemB - itemA;
+  };
+
+  const getSortData = () => {
+    const { results } = data;
+    const { column, sort } = columnsSort;
+    const newData = numFilterArray || results;
+    const sortData = newData.sort((itemA, itemB) => {
+      if (sort === 'DESC') { return sortDesc(itemA[column], itemB[column]); }
+      return sortAsc(itemA[column], itemB[column]);
+    });
+    setNumFilterArray([...sortData]);
+  };
+
   const contextValues = {
     data,
     loading,
@@ -155,6 +195,12 @@ function PlanetsProvider({ children }) {
     activeFilters,
     activeFilterReset,
     handleGetNumericFilter,
+    handleColumnsSort,
+    columnsSort,
+    FILTER_OPTIONS,
+    getSortData,
+    initialData,
+    initialSortRender,
   };
 
   return (
