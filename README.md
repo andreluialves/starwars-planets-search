@@ -22,7 +22,7 @@ Este projeto ainda está em desenvolvimento, estou implementando o CSS.
 * React JS
 * React Context API
 
-## Instalando dependẽncias
+## Executando a aplicação
 
 ### 1. Clone o repositório
 ```
