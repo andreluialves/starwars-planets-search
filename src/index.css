@@ -25,3 +25,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+option {
+  background-color: #212526;
+  color: white;
+}
+
+.border-gray {
+  border-color: #969696;
+}
+
+.w-100px {
+  width: 100px;
+}

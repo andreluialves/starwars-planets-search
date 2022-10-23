@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -16,7 +16,6 @@
 
 .App-header {
   align-items: center;
-  background-color: #282c34;
   color: white;
   display: flex;
   flex-direction: column;
@@ -27,15 +26,27 @@
 
 .App-link {
   color: #61dafb;
+} */
+
+.no-wrap {
+  white-space: nowrap;
 }
 
-@keyframes App-logo-spin {
+label span {
+  color: var(--bs-gray-500);
+  font-size: 14px;
+}
 
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+.btn-active-filter {
+  background-color: transparent;
+  border: 1px solid #ffc107;
+  color: #ffc107;
+  cursor: default;
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  vertical-align: middle;
 }
