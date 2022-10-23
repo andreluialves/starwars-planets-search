@@ -146,6 +146,7 @@ function PlanetsProvider({ children }) {
   const filterReset = (event) => {
     event.preventDefault();
     setNumFilterArray();
+    setActiveFilters();
     setUpdateOptionsFilter([
       'population', 'orbital_period', 'diameter', 'surface_water', 'rotation_period',
     ]);

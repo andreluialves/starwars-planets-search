@@ -30,7 +30,7 @@ function Table() {
   return (
     loading ? <Loading /> : (
       <div className="table-responsive">
-        <table className="table table-dark align-middle table-hover">
+        <table className="table table-dark align-middle table-hover mt-3">
           <thead>
             <tr>
               {TABLE_TITLE.map((item, index) => (
