@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c9c0513600ead2171f126ff81ee58c11",
+    "revision": "8ccaa4d251edd7ec5addb73359c16c03",
     "url": "/starwars-planets-search/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/starwars-planets-search/static/css/2.171a7357.chunk.css"
   },
   {
-    "revision": "8db0a64237fb254dd7c2",
+    "revision": "585b26ee57551a0b8be4",
     "url": "/starwars-planets-search/static/css/main.6254f604.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/starwars-planets-search/static/js/2.f8d48c36.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "8db0a64237fb254dd7c2",
-    "url": "/starwars-planets-search/static/js/main.e0649c2a.chunk.js"
+    "revision": "585b26ee57551a0b8be4",
+    "url": "/starwars-planets-search/static/js/main.024511e2.chunk.js"
   },
   {
     "revision": "1b9e9e3eb9707d3157b0",
