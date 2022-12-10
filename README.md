@@ -4,10 +4,11 @@ Projeto desenvolvido durante o módulo de Front-end do curso de desenvolvimento 
 
 O objetivo foi desenvolver uma aplicação React que lista os planetas do universo de StarWars, fazendo uma busca em uma API pública. Também tivemos que usar a React Context API para gerenciamento de estado e usar Hooks.
 
-Você pode <a href="https://andreluialves.github.io/starwars-planets-search">clicar aqui</a> para verificar o estado atual da aplicação.
-
-### Observação
+### *Status do projeto*
 Este projeto ainda está em desenvolvimento, estou implementando o CSS.
+
+### *Link do deploy*
+Você pode [**clicar aqui**](https://andreluialves.github.io/starwars-planets-search) para verificar o estado atual da aplicação.
 
 ## Habilidades desenvolvidas
 * Desenvolvimento de um aplicativo React JS
